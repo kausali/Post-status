@@ -30,6 +30,9 @@
     {
         <a href="/MyPage/MyProfile/@message.User.first_name-@message.User.last_name">@message.User.first_name </a> 
         <span>@message.message - @message.created_at.ToString(timeFirmat)</span><br>
+        <form action="/delete/@message.messageID" method="POST" class ="form">
+            <input type="image" src="https://maxcdn.icons8.com/Share/icon/p1em/Very_Basic//delete_sign1600.png" alt="Submit" height="20px" width="20px">
+        </form>
     }
     else
     {
@@ -56,14 +59,17 @@
            {
                if(sas.User.first_name == @ViewBag.CurrUser.first_name)
             {
-            <a href="/MyPage/MyProfile/@sas.User.first_name-@sas.User.last_name">@sas.User.first_name</a> <span> @sas.comment - @sas.created_at.ToString(formating)</span>
-            <hr class="lines">
+                <a href="/MyPage/MyProfile/@sas.User.first_name-@sas.User.last_name">@sas.User.first_name</a> <span> @sas.comment - @sas.created_at.ToString(formating)</span>
+                <form action="/delete/comment/@sas.commentID" method="POST" class ="form">
+                    <input type="image" src="https://maxcdn.icons8.com/Share/icon/p1em/Very_Basic//delete_sign1600.png" alt="Submit" height="20px" width="20px">
+                </form>
+                <hr class="lines">
             }
             else
             {
 
-            <a href="/User/Profile/@sas.User.userID/@sas.User.first_name-@sas.User.last_name">@sas.User.first_name</a> <span> @sas.comment - @sas.created_at.ToString(formating)</span>
-            <hr class="lines">
+                <a href="/User/Profile/@sas.User.userID/@sas.User.first_name-@sas.User.last_name">@sas.User.first_name</a> <span> @sas.comment - @sas.created_at.ToString(formating)</span>
+                <hr class="lines">
             }
            }
        }
@@ -74,10 +80,10 @@
             <input type="submit" name="submit" Value="Comment">
         </form>
     </ul>
+    <p style="color:red">@TempData["commentError"] </p>
 }
 </div>
 
-@TempData["commentError"]
 
  
                

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using wall.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace wall.Controllers
 {
@@ -78,6 +79,10 @@ namespace wall.Controllers
                 TempData["commentError"] = "Sorry you are currently not logged in. Please login first!";
                 return RedirectToAction("Index", "Home");
             }
+            if(comment == null){
+                TempData["commentError"] = "Comment should be atleast 3 characters long.";
+                return RedirectToAction("Whatever");
+            }
             if(ModelState.IsValid){
                 int myUserID = (int)HttpContext.Session.GetInt32("currUserID");
                 var commentList = _context.comments
@@ -112,12 +117,18 @@ namespace wall.Controllers
                 TempData["wallError"] = "Sorry you are currently not logged in. Please login first!";
                 return RedirectToAction("Index", "Home");
             }
+            var CurrUser = _context.users.Where(u => u.userID == mySession).SingleOrDefault();
+            ViewBag.CurrUser = CurrUser;
             User myUser = _context.users.Where(u=>u.userID == user_id).SingleOrDefault();
             ViewBag.myUser = myUser;
             List<Message> userActivity = _context.messages.OrderByDescending(z=>z.messageID)
                                         .Include(z=> z.User)
                                         .Include(u=>u.Comments)
                                         .ToList();
+            List<Comment> myComments = _context.comments.Include(a =>a.User)
+                                                        .Include(s =>s.Message)
+                                                        .ToList();
+            ViewBag.userComments = myComments;
             ViewBag.userActivity = userActivity;
             return View("Profile");
         }
@@ -138,10 +149,74 @@ namespace wall.Controllers
                                         .Include(z=> z.User)
                                         .Include(u=>u.Comments)
                                         .ToList();
+            List<Comment> myComments = _context.comments.Include(a =>a.User)
+                                                        .Include(s =>s.Message)
+                                                        .ToList();
+            // Image aimage = _context.images.Where(u=>u.UserID == mySession).SingleOrDefault();
+            // ViewBag.aimage = aimage;
+            ViewBag.userComments = myComments;
             ViewBag.myActivies = myActivities;  
             ViewBag.CurrUser = mySession;  
                  
             return View("MyProfile");
+        }
+        [HttpPost]
+        [Route("uploadphoto")]
+        public IActionResult Uploadphoto(byte image){
+            var mySession = HttpContext.Session.GetInt32("currUserID");
+            if(mySession == null){
+                TempData["wallError"] = "Sorry you are currently not logged in. Please login first!";
+                return RedirectToAction("Index", "Home");
+            }
+            int myUserID = (int)mySession;
+            // Image aimage = _context.images.Where(u=>u.UserID == myUserID).SingleOrDefault();
+            // if (aimage == null){
+            //     Image newImage = new Image{
+
+            //         image = image,
+            //         UserID = myUserID,
+            //         created_at = DateTime.Now,
+            //         updated_at = DateTime.Now
+            //     };
+                
+            //     _context.Add(newImage);
+            //     _context.SaveChanges();
+            //     return View("MyProfile");
+            // }
+            return View("MyProfile");
+        }
+        [HttpPost]
+        [Route("delete/{msgID}")]
+        public IActionResult DeleteMessage(int msgID){
+            List<Comment> userComent =_context.comments.Include(a =>a.User)
+                                                        .Include(s =>s.Message)
+                                                        .ToList();
+            foreach(var comment in userComent) 
+            {
+                if(comment.MessageID == msgID){
+                    _context.comments.Remove(comment);
+                    _context.SaveChanges();
+                }
+            }
+            Message RetrievedMessage = _context.messages.SingleOrDefault(m=>m.messageID == msgID);
+            _context.messages.Remove(RetrievedMessage);
+            _context.SaveChanges();
+            return RedirectToAction("Whatever");
+        }
+        [HttpPost]
+        [Route("delete/comment/{cmtID}")]
+        public IActionResult DeleteComment(int cmtID){
+            List<Comment> userComent =_context.comments.Include(a =>a.User)
+                                                        .Include(s =>s.Message)
+                                                        .ToList();
+            foreach(var comment in userComent) 
+            {
+                if(comment.commentID == cmtID){
+                    _context.comments.Remove(comment);
+                    _context.SaveChanges();
+                }
+            }
+            return RedirectToAction("Whatever");
         }
     
     }

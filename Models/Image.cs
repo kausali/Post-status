@@ -5,16 +5,16 @@ using System.Reflection.Metadata;
 
 namespace wall.Models
 {
-    public class UserImage: BaseEntity
+    public class Image: BaseEntity
     {
-         public int imageID { get; set; }
+        public int imageID { get; set; }
+        
         [Required]
-        public Blob image { get; set; }
+        public byte image { get; set; }
 
         public int like { get; set; }
         public int dislike { get; set; }
 
-        [Required]
         public string comment { get; set; }
 
         [Required]
@@ -23,12 +23,6 @@ namespace wall.Models
         public DateTime updated_at { get; set; }
         public User User {get;set;}
         
-        public List<User> myUsers { get; set; }
-
-        public UserImage()
-        {
-            myUsers = new List<User>();
-        }
     }
     
 }

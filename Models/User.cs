@@ -17,13 +17,13 @@ namespace wall.Models
         //List of type Message and Comment named Messages and Comments
         public List<Message> myMessages { get; set; }
         public List<Comment> myComments { get; set; }
-        public List<UserImage> myImages { get; set; }
+        public List<Image> myImages { get; set; }
 
         public User()
         {
             myMessages = new List<Message>();
             myComments = new List<Comment>();
-            myImages = new List<UserImage>();
+            myImages = new List<Image>();
         }
         
     }

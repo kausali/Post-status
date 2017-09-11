@@ -9,6 +9,7 @@ namespace wall.Models
     public DbSet<User> users { get; set; }
     public DbSet<Message> messages { get; set; }
     public DbSet<Comment> comments { get; set; }
+    public DbSet<Image> images { get; set; }
 
     //User, Message and Comment refers to our User, Message and Comment class created inside the Models
     //bdset allowss too communicate with our db and allows to get and set stuffs
