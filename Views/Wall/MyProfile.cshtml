@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = @ViewBag.myAccount.first_name + " " +@ViewBag.myAccount.last_name ;
+}
+<div class="header">
+    <a class="link" href="/the_wall">Home</a> | 
+    <a class="link" href="/logout">Logout</a>
+</div>
+<div id="body">
+    <h1>@ViewBag.myAccount.first_name  @ViewBag.myAccount.last_name </h1>
+    <!-- <input type="file" name="profile_pic">
+    <p><input type="submit" name="Upload" value="Upload" class="button" /></p> -->
+
+    @{
+                DateTime CurrentTime = DateTime.Now;
+                <!-- string format = "MMM d, hh:mm tt"; -->
+                string format = "MMMM d, hh:mm tt";
+            }
+
+    <form action="/action_page.php">
+        <input type="file" name="pic" accept="image/*">
+        <input type="submit">
+    </form>
+
+    <h3>Post a message</h3>
+    <form action="/post" method="POST">
+        <textarea placeholder="What's on your mind??" rows="3" cols="80" name="message"></textarea><br>
+        <input type="submit" name="submit" value="Post a message">
+    </form>
+    <hr>
+
+    @foreach(var activity in ViewBag.myActivies)
+    {
+        if(activity.UserID == @ViewBag.CurrUser)
+        {
+            <p><a h>@activity.User.first_name</a> - @activity.created_at.ToString(format)</p>
+            <ul style="list-style: none;">
+            <li>@activity.message</li><br>
+                <!-- <div class="container">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-thumbs-up"></span> like
+                    </button>    
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-thumbs-down"></span> dislike
+                    </button>  
+                </div>    <br>      -->
+            <form action="/comment" method ="POST">
+                <textarea placeholder="Add a comment.." rows="2" cols="56"></textarea><br>
+                <input type="submit" name="submit" Value="Comment">
+            </form>
+            </ul>   
+        }
+    }
+</div>
+

@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "The Wall";
+}
+
+ <div class="header">
+    <a class="link" href="/logout">Logout</a> | 
+    <a class="link" href="/the_wall" class="not-active">Home</a> | 
+    <a class="link" href="/MyPage/MyProfile/@ViewBag.CurrUser.first_name-@ViewBag.CurrUser.last_name">@ViewBag.CurrUser.first_name</a>   
+</div>
+
+<div id="body">
+   <h5>Welcome @ViewBag.CurrUser.first_name</h5>
+
+    <h4>Post a message</h4>
+    <form action="/post" method="POST">
+        <textarea placeholder="type here.." rows="3" cols="150" name="message"></textarea><br>
+        <input type="submit" name="submit" value="Post a message">
+    </form>
+    <hr>
+    <p style="color:red">@TempData["messageError"]</p>
+
+
+@foreach(var message in ViewBag.allMessages)
+{
+    string timeFirmat = "MMM d, hh:mm tt";
+
+    <br>
+    
+     if(message.User.first_name == @ViewBag.CurrUser.first_name)
+    {
+        <a href="/MyPage/MyProfile/@message.User.first_name-@message.User.last_name">@message.User.first_name </a> 
+        <span>@message.message - @message.created_at.ToString(timeFirmat)</span><br>
+    }
+    else
+    {
+        <a href="/User/Profile/@message.User.userID/@message.User.first_name-@message.User.last_name">@message.User.first_name</a> 
+        <span>@message.message - @message.created_at.ToString(timeFirmat)</span> 
+    }
+    <ul style="list-style: none;">
+        <!-- <form action="/likes">
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-thumbs-up"></span> like
+        </button> 
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-thumbs-down"></span> dislike
+        </button>  
+        </form> -->
+        <hr>
+            
+    <div id="commentbody">
+       @foreach(var sas in ViewBag.allComments)
+       {
+           string formating = "MMM d, hh:mm tt";
+
+           if (message.messageID == sas.MessageID)
+           {
+               if(sas.User.first_name == @ViewBag.CurrUser.first_name)
+            {
+            <a href="/MyPage/MyProfile/@sas.User.first_name-@sas.User.last_name">@sas.User.first_name</a> <span> @sas.comment - @sas.created_at.ToString(formating)</span>
+            <hr class="lines">
+            }
+            else
+            {
+
+            <a href="/User/Profile/@sas.User.userID/@sas.User.first_name-@sas.User.last_name">@sas.User.first_name</a> <span> @sas.comment - @sas.created_at.ToString(formating)</span>
+            <hr class="lines">
+            }
+           }
+       }
+    </div>
+
+        <form action="/comment/@message.messageID" method ="POST">
+            <textarea placeholder="Add a comment.." name = "comment" id="comment" rows="2" cols="68"></textarea><br>
+            <input type="submit" name="submit" Value="Comment">
+        </form>
+    </ul>
+}
+</div>
+
+@TempData["commentError"]
+
+ 
+               
+
+
+

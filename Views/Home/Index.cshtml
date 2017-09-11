@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="wrapper">
+    <img id="loginimage" src="https://cdn0.iconfinder.com/data/icons/smile-emoticons/78/Emoticons_smile_smiley-16-256.png"  style="width:70pxpx;height:70px;">
+
+    <h2>Log In</h2>
+    <h4 id="h4font">to your account</h4>
+    <hr>
+    <form action ="/login" method="POST">
+        <input class="input" placeholder="Email Address"  type="email" name="email" ><br><br>
+        <input class="input" type="password" placeholder="Password" name="password"><br><br>
+        <input type="submit" name="submit" value="Login">
+    </form>
+    <p><a href= "/account/forgot-password" >Forgot Password?</a></p>
+    <a href= "/register" >Create an Account</a>
+    <p style="color:green">@TempData["passwordChanged"]</p>
+</div>
+
+    <p style="color:red">@TempData["wallError"]</p>
+    <p style="color:red">@TempData["loginError"]</p>
+    <p style="color:red">@TempData["noData"]</p>
+    <p style="color:red">@TempData["commentError"]</p>

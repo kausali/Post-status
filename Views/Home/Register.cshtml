@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Register Here";
+}
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<div class="wrapper">
+    <h2>To Register</h2>
+    <h4 id="h4font">we need your</h4>
+    <hr>
+    <form action ="/create" method="POST">
+        <input class="input" placeholder="First Name"  type="text" name="first_name"><br><br>
+        <input class="input" placeholder="Last Name" type="text" name="last_name"><br><br>
+        <input class="input" placeholder="Email Address" type="email" name="email"><br><br>
+        <input class="input" placeholder="Password" type="password" name="password"><br><br>
+        <input class="input" placeholder="Confirm Password" type="password" name="config_password"><br><br>
+        <input class="input" type="submit" name="submit" value="Register">
+    </form>
+    <a href= "/" >Already Have an Account?</a>
+</div>
+
+
+@if (ViewBag.Status == "errors")
+{
+    foreach(var error in ViewBag.errors)
+        {
+            if(@error.Errors.Count > 0)
+            {
+                <ul style="list-style: none;">
+                    <li style="color: red">@error.Errors[0].ErrorMessage</li>
+                </ul>
+            }
+        }
+  } 
